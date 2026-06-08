@@ -4,17 +4,66 @@ import MateriasService from './materias-service.js';
 
 export default class CalificacionesService {
 constructor() {
+    this.CalificacionesRepository = new CalificacionesRepository();
+    this.AlumnosService = new AlumnosService();
+    this.MateriasService =  new MateriasService();
+}
+validarNota = async (nota) => {
 
-    this.CalificacionesRepository =
-        new CalificacionesRepository();
-
-    this.AlumnosService =
-        new AlumnosService();
-
-    this.MateriasService =
-        new MateriasService();
+    if (
+        !Number.isInteger(nota) ||
+        nota < 0 ||
+        nota > 10
+    ) {
+        throw new Error(
+            'La nota debe ser un número entero entre 0 y 10.'
+        );
+    }
 }
 
+validarAlumnoExiste = async (idAlumno) => {
+
+    const alumno =
+        await this.AlumnosService.getByIdAsync(idAlumno);
+
+    if (alumno == null) {
+        throw new Error(
+            `El alumno con id ${idAlumno} no existe.`
+        );
+    }
+}
+
+validarMateriaExiste = async (idMateria) => {
+
+    const materia =
+        await this.MateriasService
+            .getByIdAsync(idMateria);
+
+    if (materia == null) {
+        throw new Error(
+            `La materia con id ${idMateria} no existe.`
+        );
+    }
+}
+
+validarNoDuplicada = async (
+    idAlumno,
+    idMateria
+) => {
+
+    const existente =
+        await this.CalificacionesRepository
+            .getByAlumnoMateriaAsync(
+                idAlumno,
+                idMateria
+            );
+
+    if (existente != null) {
+        throw new Error(
+            `Ya existe una calificación para el alumno ${idAlumno} en la materia ${idMateria}.`
+        );
+    }
+}
 getAllAsync = async () => {
     return await this.CalificacionesRepository.getAllAsync();
 }
@@ -25,18 +74,11 @@ getByIdAsync = async (id) => {
 
 getByAlumnoAsync = async (idAlumno) => {
 
-    const alumno =
-        await this.AlumnosService
-            .getByIdAsync(idAlumno);
-
-    if (alumno == null) {
-        throw new Error(
-            `El alumno con id ${idAlumno} no existe.`
-        );
-    }
-
-    return await this.CalificacionesRepository
-        .getByAlumnoAsync(idAlumno);
+   if(await this.validarAlumnoExiste(idAlumno)) {
+    throw new Error(`El alumno con id ${idAlumno} no existe.`); 
+   }
+    const alumno = await this.AlumnosService.getByIdAsync(idAlumno);
+    return await this.CalificacionesRepository.getByAlumnoAsync(idAlumno);
 }
 
 createAsync = async (entity) => {
@@ -84,62 +126,6 @@ deleteByIdAsync = async (id) => {
         .deleteByIdAsync(id);
 }
 
-validarNota = async (nota) => {
 
-    if (
-        !Number.isInteger(nota) ||
-        nota < 0 ||
-        nota > 10
-    ) {
-        throw new Error(
-            'La nota debe ser un número entero entre 0 y 10.'
-        );
-    }
-}
-
-validarAlumnoExiste = async (idAlumno) => {
-
-    const alumno =
-        await this.AlumnosService
-            .getByIdAsync(idAlumno);
-
-    if (alumno == null) {
-        throw new Error(
-            `El alumno con id ${idAlumno} no existe.`
-        );
-    }
-}
-
-validarMateriaExiste = async (idMateria) => {
-
-    const materia =
-        await this.MateriasService
-            .getByIdAsync(idMateria);
-
-    if (materia == null) {
-        throw new Error(
-            `La materia con id ${idMateria} no existe.`
-        );
-    }
-}
-
-validarNoDuplicada = async (
-    idAlumno,
-    idMateria
-) => {
-
-    const existente =
-        await this.CalificacionesRepository
-            .getByAlumnoMateriaAsync(
-                idAlumno,
-                idMateria
-            );
-
-    if (existente != null) {
-        throw new Error(
-            `Ya existe una calificación para el alumno ${idAlumno} en la materia ${idMateria}.`
-        );
-    }
-}
 
 }

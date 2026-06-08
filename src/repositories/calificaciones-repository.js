@@ -128,34 +128,24 @@ getByAlumnoAsync = async (idAlumno) => {
     return returnArray;
 }
 
-getByAlumnoMateriaAsync = async (
-    idAlumno,
-    idMateria
-) => {
+getByAlumnoMateriaAsync = async (idAlumno, idMateria) => {
 
     let returnEntity = null;
 
     try {
 
         const sql = `
-            SELECT *
-            FROM calificaciones
-            WHERE id_alumno = $1
-            AND id_materia = $2
-        `;
-
+            SELECT *  FROM calificaciones  WHERE id_alumno = $1 AND id_materia = $2`;
         const values = [
             idAlumno,
             idMateria
         ];
 
         const resultPg =
-            await this.getDBPool()
-                .query(sql, values);
+            await this.getDBPool().query(sql, values);
 
         if (resultPg.rows.length > 0){
-            returnEntity =
-                resultPg.rows[0];
+            returnEntity = resultPg.rows[0];
         }
 
     } catch (error) {

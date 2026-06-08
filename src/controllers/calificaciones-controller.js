@@ -7,9 +7,7 @@ const currentService = new CalificacionesService();
 
 router.get('', async (req, res) => {
 try {
-
-    const returnArray =
-        await currentService.getAllAsync();
+    const returnArray = await currentService.getAllAsync();
 
     res.status(StatusCodes.OK)
        .json(returnArray);
@@ -28,54 +26,28 @@ router.get('/alumno/:idAlumno', async (req, res) => {
 
 try {
 
-    const returnArray =
-        await currentService
-            .getByAlumnoAsync(
-                req.params.idAlumno
-            );
-
-    res.status(StatusCodes.OK)
-       .json(returnArray);
-
+    const returnArray =  await currentService.getByAlumnoAsync(req.params.idAlumno);
+    res.status(StatusCodes.OK).json(returnArray);
 } catch (error) {
-
     console.log(error);
-
-    res.status(StatusCodes.NOT_FOUND)
-       .send(`Error: ${error.message}`);
+    res.status(StatusCodes.NOT_FOUND).send(`Error: ${error.message}`);
 }
-
 });
 
 router.get('/:id', async (req, res) => {
-
 try {
-
-    const entity =
-        await currentService
-            .getByIdAsync(
-                req.params.id
-            );
-
+    const entity = await currentService.getByIdAsync(req.params.id);
     if (entity != null) {
-
-        res.status(StatusCodes.OK)
-           .json(entity);
-
+        res.status(StatusCodes.OK).json(entity);
     } else {
-
-        res.status(StatusCodes.NOT_FOUND)
-           .send(
-               `No se encontró la calificación (id:${req.params.id}).`
-           );
+        res.status(StatusCodes.NOT_FOUND).send(`No se encontró la calificación (id:${req.params.id}).`);
     }
 
 } catch (error) {
 
     console.log(error);
 
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-       .send(`Error: ${error.message}`);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(`Error: ${error.message}`);
 }
 
 });
@@ -84,12 +56,9 @@ router.post('', async (req, res) => {
 
 try {
 
-    const nueva =
-        await currentService
-            .createAsync(req.body);
+    const nueva =  await currentService.createAsync(req.body);
 
-    res.status(StatusCodes.CREATED)
-       .json(nueva);
+    res.status(StatusCodes.CREATED).json(nueva);
 
 } catch (error) {
 
@@ -101,17 +70,10 @@ try {
         )
     ) {
 
-        return res.status(
-            StatusCodes.CONFLICT
-        ).json({
-            error: error.message
-        });
+        return res.status(StatusCodes.CONFLICT).json({error: error.message});
     }
 
-    res.status(StatusCodes.BAD_REQUEST)
-       .json({
-           error: error.message
-       });
+    res.status(StatusCodes.BAD_REQUEST).json({error: error.message});
 }
 
 });
@@ -123,12 +85,9 @@ try {
     let entity = req.body;
     entity.id = parseInt(req.params.id);
 
-    const rowsAffected =
-        await currentService
-            .updateAsync(entity);
+    const rowsAffected =  await currentService.updateAsync(entity);
 
-    res.status(StatusCodes.OK)
-       .json(rowsAffected);
+    res.status(StatusCodes.OK).json(rowsAffected);
 
 } catch (error) {
 
@@ -140,13 +99,10 @@ try {
         )
     ) {
 
-        return res.status(
-            StatusCodes.NOT_FOUND
-        ).send(error.message);
+        return res.status(StatusCodes.NOT_FOUND ).send(error.message);
     }
 
-    res.status(StatusCodes.BAD_REQUEST)
-       .send(`Error: ${error.message}`);
+    res.status(StatusCodes.BAD_REQUEST).send(`Error: ${error.message}`);
 }
 
 });
@@ -155,11 +111,7 @@ router.delete('/:id', async (req, res) => {
 
 try {
 
-    const rowCount =
-        await currentService
-            .deleteByIdAsync(
-                req.params.id
-            );
+    const rowCount =  await currentService.deleteByIdAsync(req.params.id);
 
     if (rowCount != 0) {
 

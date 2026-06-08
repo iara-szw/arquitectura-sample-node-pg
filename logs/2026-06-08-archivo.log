@@ -17,3 +17,12 @@ error: el valor nulo en la columna «fecha» de la relación «calificaciones» 
     at async CalificacionesService.createAsync (file:///C:/Users/devandroid/Downloads/arquitectura-sample-node-pg/src/services/calificaciones-service.js:59:12)
     at async file:///C:/Users/devandroid/Downloads/arquitectura-sample-node-pg/src/controllers/calificaciones-controller.js:88:9
 
+2026-06-08T17:55:43.328Z: error - el valor nulo en la columna «fecha» de la relación «calificaciones» viola la restricción de no nulo
+Stack Trace:
+error: el valor nulo en la columna «fecha» de la relación «calificaciones» viola la restricción de no nulo
+    at C:\Users\devandroid\Downloads\arquitectura-sample-node-pg\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async CalificacionesRepository.createAsync (file:///C:/Users/devandroid/Downloads/arquitectura-sample-node-pg/src/repositories/calificaciones-repository.js:197:13)
+    at async CalificacionesService.createAsync (file:///C:/Users/devandroid/Downloads/arquitectura-sample-node-pg/src/services/calificaciones-service.js:51:12)
+    at async file:///C:/Users/devandroid/Downloads/arquitectura-sample-node-pg/src/controllers/calificaciones-controller.js:59:20
+

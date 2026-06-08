@@ -9,6 +9,15 @@ CREATE TABLE materias (
     nombre VARCHAR(75) NOT NULL
 );
 
+CREATE TABLE alumnos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(75) NOT NULL,
+    apellido VARCHAR(75) NOT NULL,
+    id_curso INT REFERENCES cursos(id),
+    fecha_nacimiento DATE,
+    hace_deportes BOOLEAN
+);
+
 -- Tabla calificaciones
 -- Cada alumno tiene UNA sola calificación por materia (no se puede repetir la combinación alumno+materia).
 CREATE TABLE calificaciones (
@@ -21,14 +30,7 @@ CREATE TABLE calificaciones (
 );
 
 -- Tabla alumnos
-CREATE TABLE alumnos (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(75) NOT NULL,
-    apellido VARCHAR(75) NOT NULL,
-    id_curso INT REFERENCES cursos(id),
-    fecha_nacimiento DATE,
-    hace_deportes BOOLEAN
-);
+
 
 -- INSERTS PARA cursos
 INSERT INTO cursos (nombre) VALUES ('5IA');
