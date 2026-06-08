@@ -2,7 +2,7 @@ import MateriasRepository from '../repositories/materias-repository.js';
 
 export default class MateriasService {
     constructor() {
-        console.log('Estoy en: CursosService.constructor()');
+        console.log('Estoy en: MateriaService.constructor()');
         this.MateriasRepository = new MateriasRepository();
     }
 
@@ -21,12 +21,19 @@ export default class MateriasService {
     createAsync = async (entity) => {
         console.log(`MateriasService.createAsync(${JSON.stringify(entity)})`);
         const rowsAffected = await this.MateriasRepository.createAsync(entity);
-        return rowsAffected;
+          if (!entity.nombre?.trim()) {
+            throw new Error(
+                'El nombre de la materia no puede estar vacio.'
+            );
+        }
+
+        return await rowsAffected;
     }
 
     updateAsync = async (entity) => {
         console.log(`MateriasService.updateAsync(${JSON.stringify(entity)})`);
         const rowsAffected = await this.MateriasRepository.updateAsync(entity);
+           
         return rowsAffected;
     }
     
