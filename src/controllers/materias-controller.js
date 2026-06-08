@@ -27,7 +27,7 @@ router.get('/:id', async (req, res) => {
         if (returnEntity != null){
             res.status(StatusCodes.OK).json(returnEntity);
         } else {
-            res.status(StatusCodes.NOT_FOUND).send(`No se encontro la entidad (id:${id}).`);
+            res.status(StatusCodes.NOT_FOUND).send(`No se encontró la materia (id: ${id}).`);
         }
     } catch (error) {
         console.log(error);
@@ -64,7 +64,7 @@ router.put('/:id', async (req, res) => {
         if (rowsAffected != 0){
             res.status(StatusCodes.OK).json(rowsAffected);
         } else {
-            res.status(StatusCodes.NOT_FOUND).send(`No se encontro la entidad (id:${id}).`);
+            res.status(StatusCodes.NOT_FOUND).send(`No se encontró la materia (id: ${id}).`);
         }
     } catch (error) {
         console.log(error);
@@ -79,11 +79,16 @@ router.delete('/:id', async (req, res) => {
         if (rowCount != 0){
             res.status(StatusCodes.OK).json(null);
         } else {
-            res.status(StatusCodes.NOT_FOUND).send(`No se encontro la entidad (id:${id}).`);
+            res.status(StatusCodes.NOT_FOUND).send(`No se encontró la materia (id: ${id}).`);
         }
     } catch (error) {
         console.log(error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(`Error: ${error.message}`);
+        // Error 23503 = foreign_key_violation en PostgreSQL
+        if (error.code === '23503') {
+            res.status(StatusCodes.BAD_REQUEST).send(`No se puede eliminar la materia porque tiene calificaciones asociadas.`);
+        } else {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(`Error: ${error.message}`);
+        }
     }
 });
 

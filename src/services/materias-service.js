@@ -20,14 +20,11 @@ export default class MateriasService {
 
     createAsync = async (entity) => {
         console.log(`MateriasService.createAsync(${JSON.stringify(entity)})`);
-        const rowsAffected = await this.MateriasRepository.createAsync(entity);
-          if (!entity.nombre?.trim()) {
-            throw new Error(
-                'El nombre de la materia no puede estar vacio.'
-            );
+        // Validación: nombre obligatorio (va ANTES de llamar al repository)
+        if (!entity.nombre?.trim()) {
+            throw new Error('El nombre de la materia es obligatorio.');
         }
-
-        return await rowsAffected;
+        return await this.MateriasRepository.createAsync(entity);
     }
 
     updateAsync = async (entity) => {

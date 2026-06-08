@@ -37,6 +37,12 @@ export default class MateriasRepository {
     deleteByIdAsync = async (id) => {
         console.log(`MateriasRepository.deleteByIdAsync(${id})`);
         const sql = `DELETE FROM materias WHERE id=$1`;
-        return await this.db.queryRowCount(sql, [id]);
+        // Ejecutamos directamente para que los errores de FK lleguen al controller
+        try {
+            const resultPg = await this.db.getDBPool().query(sql, [id]);
+            return resultPg.rowCount;
+        } catch (error) {
+            throw error; // re-lanzar para que el controller pueda atrapar el error 23503
+        }
     }
 }
